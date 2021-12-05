@@ -2,6 +2,7 @@ import mongoose from 'mongoose';
 import express from 'express';
 import bodyParser from 'body-parser';
 import userRouter from './routers/usersRouter.js';
+import productRouter from './routers/productRouter.js';
 import errorHandler from './routers/errors.js';
 import cors from 'cors';
 var app = express();
@@ -11,14 +12,14 @@ var HOST_NAME = 'localhost';
 var DATABASE_NAME = 'shoppingList';
 
 mongoose.connect('mongodb://' + HOST_NAME + '/' + DATABASE_NAME);
-
-app.use(bodyParser.json());
+app.use(bodyParser.json({limit: "50mb"}));
 app.use(cors());
 app.set("etag", false);
 app.use(bodyParser.urlencoded({
     extended: true
 }));
 app.use('/users', userRouter)
+app.use('/products', productRouter)
 app.use(errorHandler)
 
 

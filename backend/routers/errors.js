@@ -23,7 +23,7 @@ const handleValidationError = (err, res) => {
 //error controller function
 export default (err, req, res, next) => {
     try {
-        console.log('congrats you hit the error middleware');
+        console.log(`congrats you hit the error middleware ${err.message}`);
         if (err.name === 'ValidationError') return err = handleValidationError(err, res);
         if (err.code && err.code == 11000) return err = handleDuplicateKeyError(err, res);
     } catch (err) {

@@ -48,11 +48,12 @@ userRouter.get(
     '/',
     expressAsyncHandler(async (req, res) => {
         const start = req.query._start
+        const end = req.query._end
         const users = await User.find()
             .sort({'id': -1})
         res.set('Access-Control-Expose-Headers', 'X-Total-Count')
         res.setHeader('X-Total-Count', users.length)
-        res.send(users.slice(start));
+        res.send(users.slice(start, end));
     })
 );
 
