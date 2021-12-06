@@ -5,6 +5,7 @@ import {UserCreate, UserEdit, UserList} from "./components/users";
 import {ProductCreate, ProductEdit, ProductList} from "./components/products";
 import PostIcon from '@material-ui/icons/Book';
 import UserIcon from '@material-ui/icons/Group';
+import authProvider from "./components/auth";
 
 const convertFileToBase64 = file =>
     new Promise((resolve, reject) => {
@@ -49,7 +50,7 @@ const imageDataProvider = {
 };
 const App = () => (
 
-    <Admin dataProvider={imageDataProvider} >
+    <Admin dataProvider={imageDataProvider} authProvider={authProvider}>
         <Resource name="products" create={ProductCreate} list={ProductList} edit={ProductEdit} icon={PostIcon} />
         <Resource name="users" list={UserList} icon={UserIcon} create={UserCreate} edit={UserEdit} />
     </Admin>
