@@ -21,24 +21,10 @@ const imageDataProvider = {
     ...dataProvider,
     create: async (resource, params) => {
         if (resource !== 'products' || !params.data.image) {
-            return dataProvider.update(resource, params);
+            return dataProvider.create(resource, params);
         }
         const base64Picture = await convertFileToBase64(params.data.image);
         return await dataProvider.create(resource, {
-            ...params,
-            data: {
-                ...params.data,
-                image: base64Picture
-                ,
-            },
-        });
-    },
-    update: async (resource, params) => {
-        if (resource !== 'products' || !params.data.image) {
-            return dataProvider.update(resource, params);
-        }
-        const base64Picture = await convertFileToBase64(params.data.image);
-        return await dataProvider.update(resource, {
             ...params,
             data: {
                 ...params.data,

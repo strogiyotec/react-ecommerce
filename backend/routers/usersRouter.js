@@ -1,4 +1,6 @@
 import User from '../models/userModel.js';
+import Product from '../models/postModel.js';
+import Order from '../models/orderModel.js';
 import bcrypt from 'bcryptjs';
 import express from 'express';
 import jwt from 'jsonwebtoken';
@@ -31,6 +33,13 @@ userRouter.put(
         } else {
             res.status(404).send({message: 'User Not Found'});
         }
+    })
+);
+userRouter.get(
+    '/:id/orders',
+    expressAsyncHandler(async (req, res) => {
+        const orders = await Order.find({userId: req.params.id});
+        res.send(orders)
     })
 );
 userRouter.get(
@@ -81,6 +90,27 @@ userRouter.post(
     })
 );
 userRouter.post(
+    '/:id/product/:productId',
+    expressAsyncHandler(async (req, res) => {
+        const user = await User.findById(req.params.id);
+        if (!user) {
+            res.statusCode(404).send({})
+            return
+        }
+        const product = await Product.findById(req.params.productId)
+        const order = new Order({
+            name: product.name,
+            image: product.image,
+            price: product.price,
+            userId: req.params.id
+        });
+        const createdOrder = await order.save();
+        res.send({
+            id: createdOrder._id,
+        });
+    })
+);
+userRouter.post(
     '/',
     expressAsyncHandler(async (req, res) => {
         const user = new User({
@@ -91,7 +121,7 @@ userRouter.post(
         });
         const createdUser = await user.save();
         res.send({
-            id: createdUser._id,
+            id: createdUser.id,
             name: createdUser.name,
             email: createdUser.email,
             isAdmin: createdUser.isAdmin,
